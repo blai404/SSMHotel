@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="io.github.blai44.dao.BookOrderDao">
+	<!-- 预订订单添加操作 -->
+	<insert id="add" parameterType="io.github.blai44.entity.BookOrder" >
+		insert into book_order(id,customerId,roomTypeId,name,idCard,phoneNum,status,arrivedDate,leaveDate,bookTime,remark) 
+		values(null,#{customerId},#{roomTypeId},#{name},#{idCard},#{phoneNum},#{status},#{arrivedDate},#{leaveDate},#{bookTime},#{remark})
+	</insert>
+	
+	<!-- 修改预订订单信息 -->
+	<update id="edit" parameterType="io.github.blai44.entity.BookOrder">
+		update book_order set customerId = #{customerId},roomTypeId = #{roomTypeId},name = #{name},idCard = #{idCard},phoneNum = #{phoneNum},status = #{status},arrivedDate = #{arrivedDate},leaveDate = #{leaveDate},remark = #{remark} 
+		where id = #{id}
+	</update>
+	
+	<!-- 预订订单信息搜索查询 -->
+	<select id="findList" parameterType="Map" resultType="io.github.blai44.entity.BookOrder">
+		select * from book_order where 1 = 1   
+		<if test="name != null">
+			and name like '%${name}%' 
+		</if>
+		<if test="customerId != null">
+			and customerId = #{customerId}  
+		</if>
+		<if test="roomTypeId != null">
+			and roomTypeId = #{roomTypeId}   
+		</if>
+		<if test="idCard != null">
+			and idCard like '%${idCard}%' 
+		</if>
+		<if test="phoneNum != null">
+			and phoneNum like '%${phoneNum}%' 
+		</if>
+		<if test="status != null">
+			and status = #{status} 
+		</if>
+		<if test="offset != null and pageSize != null">
+			limit #{offset},#{pageSize}
+		</if>
+	</select>
+	
+	<!-- 获取单个预订订单信息 -->
+	<select id="find" parameterType="Long" resultType="io.github.blai44.entity.BookOrder">
+		select * from book_order where id = #{value}   
+	</select>
+	
+	<!-- 模糊搜索预订订单总条数 -->
+	<select id="getTotal" parameterType="Map" resultType="Integer">
+		select count(*) from book_order where 1 = 1    
+		<if test="name != null">
+			and name like '%${name}%' 
+		</if>
+		<if test="customerId != null">
+			and customerId = #{customerId}  
+		</if>
+		<if test="roomTypeId != null">
+			and roomTypeId = #{roomTypeId}   
+		</if>
+		<if test="idCard != null">
+			and idCard like '%${idCard}%' 
+		</if>
+		<if test="phoneNum != null">
+			and phoneNum like '%${phoneNum}%' 
+		</if>
+		<if test="status != null">
+			and status = #{status} 
+		</if>
+	</select>
+	
+	<!-- 删除预订订单信息 -->
+	<delete id="delete" parameterType="Long">
+		delete from book_order where id = ${value}
+	</delete>
+</mapper>
